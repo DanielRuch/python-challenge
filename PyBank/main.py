@@ -4,11 +4,9 @@
 import os # This will allow us to create file paths across operating systems
 import csv # Module for reading CSV files
 
-#Read each line of csv into array
-
 #CSV Path
 readFilePath = f'{os.path.dirname(os.path.abspath(__file__))}\Resources\\budget_data.csv'
-numarray = []
+
 with open(readFilePath) as csvfile: #, mode='rU'
 
     # CSV reader specifies delimiter and variable that holds contents
@@ -16,7 +14,7 @@ with open(readFilePath) as csvfile: #, mode='rU'
 
     next(csvreader) #skip the header
 
-    # Initilize variables
+    # Initialize variables
     prevRowValue = 0
     monthCount = 0
     totalAmount = 0
@@ -60,11 +58,21 @@ with open(readFilePath) as csvfile: #, mode='rU'
 
 #Calculate Average Change, but adjust for first row
 averageChange = differenceTotal/ (monthCount - 1)
+#Build Output
+outputData = []
+outputData.append(["Financial Analysis"])
+outputData.append(["-------------------"]) 
+outputData.append([f'Total Months: {monthCount}'])
+outputData.append([f'Total: ${totalAmount}']) 
+outputData.append([f'Average Change: ${averageChange :.2f}'])
+outputData.append([f'Greatest Increase in Profits: {greatestIncreaseDate} (${greatestIncreaseValue})'])
+outputData.append([f'Greatest Decrease in Profits: {greatestDecreaseDate} (${greatestDecreaseValue})'])
 
-print("Financial Analysis")
-print("-------------------")
-print(f'Total Months: {monthCount}')
-print(f'Total: ${totalAmount}')
-print(f'Average Change: ${averageChange :.2f}')
-print(f'Greatest Increase in Profits: {greatestIncreaseDate} (${greatestIncreaseValue})')
-print(f'Greatest Decrease in Profits: {greatestDecreaseDate} (${greatestDecreaseValue})')
+#Output path of text file
+outputFilePath = f'{os.path.dirname(os.path.abspath(__file__))}\Resources\\financialAnalysisResults.txt'
+
+#Print results to terminal and output to file
+with open(outputFilePath, 'w') as txt:
+    for row in outputData:
+        print(row[0])
+        txt.write(f'{row[0]}{chr(10)}') #Add line feed
